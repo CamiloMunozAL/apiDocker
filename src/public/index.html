@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Board API Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: #77c7fc 3px solid;
+        }
+        header a, header h1 {
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+        header h1 {
+            margin: 0;
+            padding-bottom: 10px;
+        }
+        .content {
+            margin: 20px 0;
+        }
+        h2 {
+            color: #333;
+        }
+        h3 {
+            color: #555;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        ul li {
+            background: #f4f4f4;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-left: #77c7fc 4px solid;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            overflow: auto;
+        }
+        .footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header class="container">
+        <h1>Kanban Board API Documentation</h1>
+        <a href="https://apikanbants.onrender.com">Deploy: https://apikanbants.onrender.com</a><br>
+        <a href="https://apikanbants.onrender.com/api">Use: https://apikanbants.onrender.com/api</a>
+    </header>
+
+    <div class="container content">
+        <h2>Endpoints</h2>
+
+        <h3>Authentication API Endpoints</h3>
+        <p>This API provides endpoints for user authentication, including registration, login, and logout. It handles user validation, password hashing, token generation, and cookie management.</p>
+        
+        <h4>Register User</h4>
+        <ul>
+            <li><strong>URL:</strong> <code>POST /register</code></li>
+            <li><strong>Description:</strong> Registers a new user with the provided username, email, and password.</li>
+            <li><strong>Request Body:</strong> 
+                <pre>
+{
+  "username": "string",
+  "email": "string",
+  "password": "string"
+}
+                </pre>
+            </li>
+            <li><strong>Responses:</strong>
+                <ul>
+                    <li><code>201 Created</code>: User successfully registered.</li>
+                    <li><code>400 Bad Request</code>: Validation error or missing parameters.</li>
+                    <li><code>409 Conflict</code>: Username or email already exists.</li>
+                    <li><code>500 Internal Server Error</code>: Server error.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h4>Login User</h4>
+        <ul>
+            <li><strong>URL:</strong> <code>POST /login</code></li>
+            <li><strong>Description:</strong> Logs in a user with the provided email and password, generating a JWT token for authentication.</li>
+            <li><strong>Request Body:</strong> 
+                <pre>
+{
+  "email": "string",
+  "password": "string"
+}
+                </pre>
+            </li>
+            <li><strong>Responses:</strong>
+                <ul>
+                    <li><code>200 OK</code>: User successfully logged in, returns a JWT token.</li>
+                    <li><code>400 Bad Request</code>: Validation error or missing parameters.</li>
+                    <li><code>401 Unauthorized</code>: Invalid credentials.</li>
+                    <li><code>500 Internal Server Error</code>: Server error.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h4>Logout User</h4>
+        <ul>
+            <li><strong>URL:</strong> <code>GET /logout</code></li>
+            <li><strong>Description:</strong> Logs out the currently authenticated user by clearing the access token cookie.</li>
+            <li><strong>Responses:</strong>
+                <ul>
+                    <li><code>200 OK</code>: User successfully logged out.</li>
+                    <li><code>500 Internal Server Error</code>: Server error.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>Section API Endpoints</h3>
+        <p>This API provides endpoints to manage sections associated with users in a database. It includes functionalities for creating, retrieving, updating, and deleting sections, as well as retrieving all sections of a user.</p>
+        
+        <h4>Get All Sections</h4>
+        <ul>
+            <li><strong>URL:</strong> <code>GET /sections</code></li>
+            <li><strong>Description:</strong> Retrieves all sections for the authenticated user.</li>
+            <li><strong>Responses:</strong>
+                <ul>
+                    <li><code>200 OK</code>: Returns an array of sections.</li>
+                    <li><code>401 Unauthorized</code>: User is not authenticated.</li>
+                    <li><code>404 Not Found</code>: No sections found for the user.</li>
+                    <li><code>500 Internal Server Error</code>: Server error.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h4>Create Section</h4>
+        <ul>
+            <li><strong>URL:</strong> <code>POST /sections</code></li>
+            <li><strong>Description:</strong> Creates a new section for the authenticated user.</li>
+            <li><strong>Request Body:</strong> 
+                <pre>
+{
+  "title_section": "string"
+}
+                </pre>
+            </li>
+            <li><strong>Responses:</strong>
+                <ul>
+                    <li><code>201 Created</code>: Section successfully created.</li>
+                    <li><code>400 Bad Request</code>: Validation error or missing parameters.</li>
+                    <li><code>401 Unauthorized</code>: User is not authenticated.</li>
+                    <li><code>500 Internal Server Error</code>: Server error.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h4>Update Section</h4>
+        <ul>
+            <li><strong>URL:</strong> <code>PUT /sections/:id_section</code></li>
+            <li><strong>Description:</strong> Updates an existing section for the authenticated user.</li>
+            <li><strong>Request Parameters:</strong> 
+                <pre>
+{
+  "id_section": "string"
+}
+                </pre>
+            </li>
+            <li><strong>Request Body:</strong> 
+                <pre>
+{
+  "title_section": "string"
+}
+                </pre>
+            </li>
+            <li><strong>Responses:</strong>
+                <ul>
+                    <li><code>200 OK</code>: Section successfully updated.</li>
+                    <li><code>400 Bad Request</code>: Validation error or missing parameters.</li>
+                    <li><code>401 Unauthorized</code>: User is not authenticated.</li>
+                    <li><code>404 Not Found</code>: Section not found or does not belong to the user.</li>
+                    <li><code>500 Internal Server Error</code>: Server error.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h4>Delete Section</h4>
+        <ul>
+            <li><strong>URL:</strong> <code>DELETE /sections/:id_section</code></li>
+            <li><strong>Description:</strong> Deletes a section for the authenticated user.</li>
+            <li><strong>Request Parameters:</strong> 
+                <pre>
+{
+  "id_section": "string"
+}
+                </pre>
+            </li>
+            <li><strong>Responses:</strong>
+                <ul>
+                    <li><code>204 No Content</code>: Section successfully deleted.</li>
+                    <li><code>401 Unauthorized</code>: User is not authenticated.</li>
+                    <li><code>404 Not Found</code>: Section not found or does not belong to the user.</li>
+                    <li><code>500 Internal Server Error</code>: Server error.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>Task API Endpoints</h3>
+        <p>This API provides endpoints to manage tasks associated with sections in a database. It includes functionalities for creating, retrieving, updating, and deleting tasks, as well as retrieving all tasks for a user.</p>
+
+        <h4>Get Task by ID</h4>
+        <ul>
+            <li><strong>URL:</strong> <code>GET /tasks/:id_task</code></li>
+            <li><strong>Description:</strong> Retrieves a task by its ID for the authenticated user.</li>
+            <li><strong>Responses:</strong>
+                <ul>
+                    <li><code>200 OK</code>: Returns the task object.</li>
+                    <li><code>401 Unauthorized</code>: User is not authenticated.</li>
+                    <li><code>404 Not Found</code>: Task not found for the user.</li>
+                    <li><code>500 Internal Server Error</code>: Server error.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h4>Get All Tasks</h4>
+        <ul>
+            <li><strong>URL:</strong> <code>GET /tasks</code></li>
+            <li><strong>Description:</strong> Retrieves all tasks for the authenticated user.</li>
+            <li><strong>Responses:</strong>
+                <ul>
+                    <li><code>200 OK</code>: Returns an array of tasks.</li>
+                    <li><code>401 Unauthorized</code>: User is not authenticated.</li>
+                    <li><code>404 Not Found</code>: No tasks found for the user.</li>
+                    <li><code>500 Internal Server Error</code>: Server error.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h4>Create Task</h4>
+        <ul>
+            <li><strong>URL:</strong> <code>POST /tasks</code></li>
+            <li><strong>Description:</strong> Creates a new task for the authenticated user.</li>
+            <li><strong>Request Body:</strong> 
+                <pre>
+{
+  "title_task": "string",
+  "description_task": "string" (optional),
+  "id_section": "string" (ID of the section to which the task belongs)
+}
+                </pre>
+            </li>
+            <li><strong>Responses:</strong>
+                <ul>
+                    <li><code>201 Created</code>: Task successfully created.</li>
+                    <li><code>400 Bad Request</code>: Validation error or missing parameters.</li>
+                    <li><code>401 Unauthorized</code>: User is not authenticated.</li>
+                    <li><code>404 Not Found</code>: Section not found or does not belong to the user.</li>
+                    <li><code>500 Internal Server Error</code>: Server error.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h4>Update Task</h4>
+        <ul>
+            <li><strong>URL:</strong> <code>PATCH /tasks/:id_task</code></li>
+            <li><strong>Description:</strong> Updates an existing task for the authenticated user.</li>
+            <li><strong>Request Parameters:</strong> 
+                <pre>
+{
+  "id_task": "string"
+}
+                </pre>
+            </li>
+            <li><strong>Request Body:</strong> 
+                <pre>
+{
+  "title_task": "string",
+  "description_task": "string" (optional),
+  "id_section": "string" (ID of the section to which the task belongs)
+}
+                </pre>
+            </li>
+            <li><strong>Responses:</strong>
+                <ul>
+                    <li><code>200 OK</code>: Task successfully updated.</li>
+                    <li><code>400 Bad Request</code>: Validation error or missing parameters.</li>
+                    <li><code>401 Unauthorized</code>: User is not authenticated.</li>
+                    <li><code>404 Not Found</code>: Task not found or does not belong to the user.</li>
+                    <li><code>500 Internal Server Error</code>: Server error.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h4>Delete Task</h4>
+        <ul>
+            <li><strong>URL:</strong> <code>DELETE /tasks/:id_task</code></li>
+            <li><strong>Description:</strong> Deletes a task for the authenticated user.</li>
+            <li><strong>Request Parameters:</strong> 
+                <pre>
+{
+  "id_task": "string"
+}
+                </pre>
+            </li>
+            <li><strong>Responses:</strong>
+                <ul>
+                    <li><code>204 No Content</code>: Task successfully deleted.</li>
+                    <li><code>401 Unauthorized</code>: User is not authenticated.</li>
+                    <li><code>404 Not Found</code>: Task not found or does not belong to the user.</li>
+                    <li><code>500 Internal Server Error</code>: Server error.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>User API Endpoints</h3>
+        <p>This API provides endpoints to manage user profiles, including retrieving and updating user information.</p>
+
+        <h4>Get User Profile</h4>
+        <ul>
+            <li><strong>URL:</strong> <code>GET /user/profile</code></li>
+            <li><strong>Description:</strong> Retrieves the profile of the authenticated user.</li>
+            <li><strong>Responses:</strong>
+                <ul>
+                    <li><code>200 OK</code>: Returns the user profile object.</li>
+                    <li><code>401 Unauthorized</code>: User is not authenticated.</li>
+                    <li><code>404 Not Found</code>: User not found.</li>
+                    <li><code>500 Internal Server Error</code>: Server error.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h4>Update User Profile</h4>
+        <ul>
+            <li><strong>URL:</strong> <code>PATCH /user/profile</code></li>
+            <li><strong>Description:</strong> Updates the profile of the authenticated user.</li>
+            <li><strong>Request Body:</strong> 
+                <pre>
+{
+  "username": "string",
+  "password": "string",
+  "email": "string" (must be a valid email address)
+}
+                </pre>
+            </li>
+            <li><strong>Responses:</strong>
+                <ul>
+                    <li><code>200 OK</code>: User profile successfully updated. Returns the updated user profile object.</li>
+                    <li><code>400 Bad Request</code>: Validation error or missing parameters.</li>
+                    <li><code>401 Unauthorized</code>: User is not authenticated.</li>
+                    <li><code>404 Not Found</code>: User not found.</li>
+                    <li><code>500 Internal Server Error</code>: Server error.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>Database Configuration</h3>
+        <p>To connect to the database and configure JWT, we need to set the following environment variables:</p>
+
+        <h4>Database</h4>
+        <ul>
+            <li><strong>DB_USER:</strong> The database user name.</li>
+            <li><strong>DB_HOST:</strong> The database host address.</li>
+            <li><strong>DB_DATABASE:</strong> The name of the database.</li>
+            <li><strong>DB_PASSWORD:</strong> The database user password.</li>
+            <li><strong>DB_PORT:</strong> The port on which the database is listening.</li>
+        </ul>
+
+        <h4>JWT</h4>
+        <ul>
+            <li><strong>JWT_SECRET:</strong> The secret key used to sign JWT tokens.</li>
+        </ul>
+
+        <h4>Example <code>.env</code> File</h4>
+        <pre>
+DB_USER=your_db_user
+DB_HOST=your_db_host
+DB_DATABASE=your_db_name
+DB_PASSWORD=your_db_password
+DB_PORT=your_db_port
+
+JWT_SECRET=your_jwt_secret
+        </pre>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 Kanban Board API Documentation</p>
+    </div>
+</body>
+</html>
